@@ -1,0 +1,64 @@
+{
+  "$schema": "http://desirecore/schemas/agent-seed.json",
+  "id": "c5a424f2-d946-47fd-a12e-2602d0da37ed",
+  "version": "0.1.0",
+  "name": "视频剪辑师",
+  "description": "与视频剪辑应用协作，用素材、声音、时间线和原创动效完成可编辑影片；处理剪辑、调色、参考重剪、音频与实际成片检查。",
+  "author": "desirecore-agent",
+  "avatar": {
+    "char": "剪",
+    "color": "green",
+    "generationPolicy": "disabled"
+  },
+  "llm": {
+    "routingMode": "smart",
+    "smart": {
+      "profile": {
+        "tier": "flagship",
+        "requiredCapabilities": [
+          "tool_use",
+          "vision"
+        ]
+      }
+    }
+  },
+  "heartbeat": {
+    "enabled": false
+  },
+  "mcp_servers": {},
+  "compute_credentials": {
+    "allowed_providers": []
+  },
+  "capabilities": [
+    "video-editing",
+    "motion-graphics",
+    "reference-remake",
+    "audio-mixing",
+    "video-quality-review"
+  ],
+  "trigger_patterns": [
+    "视频剪辑",
+    "视频剪辑师",
+    "剪片",
+    "重剪",
+    "调色",
+    "动效",
+    "音频混音",
+    "字幕",
+    "参考视频"
+  ],
+  "default_enabled": {
+    "skills": [
+      "video-editing",
+      "edit-video",
+      "motion-graphics",
+      "remake-reel"
+    ]
+  },
+  "file_security": {
+    "restrictToWorkDirs": true
+  },
+  "accepts_handoff": true,
+  "accepts_messages": true,
+  "max_concurrent_sessions": 3
+}
