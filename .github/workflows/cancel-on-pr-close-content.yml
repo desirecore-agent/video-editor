@@ -1,7 +1,6 @@
 name: Cancel Video editor content checks runs on PR close
 on:
   pull_request_target:
-    branches: [main]
     types: [closed]
 permissions: {}
 concurrency:
