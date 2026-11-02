@@ -1,0 +1,14 @@
+name: Cancel Video editor content checks runs on PR close
+on:
+  pull_request_target:
+    types: [closed]
+permissions: {}
+concurrency:
+  group: video-editor-content-refs/pull/${{ github.event.pull_request.number }}/merge
+  cancel-in-progress: true
+jobs:
+  cancel:
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: 'true'

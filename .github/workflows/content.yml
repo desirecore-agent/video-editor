@@ -1,0 +1,39 @@
+name: Video editor content checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: video-editor-content-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  content:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate distributed source policy
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import { checkContent } from './scripts/content-check.mjs';
+          const result = checkContent(process.cwd());
+          assert.deepEqual(result.errors, []);
+          console.log(`Content: ${result.skills} skills, layered prompts and upstream provenance passed.`);
+          NODE
+      - name: Test locator and clean-source package
+        run: node --test tests/*.test.mjs
+
+# Current private platform Schema/parser validation is separate:
+# node scripts/validate.mjs --desirecore-root <reviewed checkout>
+# No platform contract or native acceptance is claimed by this content-only job.

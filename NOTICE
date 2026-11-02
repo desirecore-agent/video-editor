@@ -1,0 +1,16 @@
+视频剪辑师 / video-editor
+
+Original Agent content and integration wrapper: Copyright (c) 2026 desirecore-agent.
+
+The edit-video, motion-graphics and remake-reel skills are adapted from
+ronak-create/FableCut, Copyright (c) 2026 ronak-create, under MIT.
+Source: https://github.com/ronak-create/FableCut
+Commit: 61bf46babca82214c162c0650e47a81c3530982c
+The complete upstream license is licenses/FableCut-MIT.txt.
+Unmodified source skill files are preserved under
+skills/video-editing/references/upstream/skills/.
+
+Changes: DesireCore skill metadata, managed application identity/lifecycle,
+project revision preconditions, export receipts, and permission boundaries.
+The fablecut_ tool prefix is retained for protocol compatibility.
+No upstream service, model runtime, user data or credentials are included.
