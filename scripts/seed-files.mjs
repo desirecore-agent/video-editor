@@ -1,7 +1,7 @@
 /** Exact distributable source list. Runtime, preferences and authoring tools never enter a seed. */
 export const SEED_ROOT = 'video-editor';
 export const SEED_FILES = Object.freeze([
-  'agent.json', 'persona.md', 'principles.md', 'instructions.md',
+  'agent.json', 'assets/avatar.png', 'assets/README.md', 'persona.md', 'principles.md', 'instructions.md',
   'README.md', 'README.en-US.md', 'USAGE.md', 'LICENSE', 'NOTICE',
   'licenses/FableCut-MIT.txt',
   'skills/video-editing/SKILL.md',

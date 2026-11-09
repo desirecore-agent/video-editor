@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, cpSync, writeFileSync, rmSync, symlinkSync, unlinkSync } from 'node:fs';
+import { mkdtempSync, cpSync, writeFileSync, rmSync, symlinkSync, unlinkSync, readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
@@ -42,7 +42,7 @@ test('archive is deterministic and contains only explicit distributable source',
   assert.deepEqual(archive.bytes, buildSeedArchive(directory).bytes);
   const entries = zipEntries(archive.bytes);
   assert.deepEqual(entries.map(({ name }) => name), SEED_FILES.map((name) => `${SEED_ROOT}/${name}`));
-  assert.equal(entries.length, 19);
+  assert.equal(entries.length, 21);
   for (const { name, data } of entries) {
     assert.ok(!name.includes('..') && !name.startsWith('/'));
     const record = archive.entries.find((entry) => entry.name === name);
@@ -51,6 +51,9 @@ test('archive is deterministic and contains only explicit distributable source',
   const config = JSON.parse(entries.find(({ name }) => name.endsWith('/agent.json')).data.toString('utf8'));
   assert.equal(config.id, 'c5a424f2-d946-47fd-a12e-2602d0da37ed');
   assert.deepEqual(config.mcp_servers, {});
+  const avatar = entries.find(({ name }) => name === `${SEED_ROOT}/${config.avatar.image.path}`);
+  assert.ok(avatar, 'The avatar referenced by agent.json must be distributed in the ZIP.');
+  assert.deepEqual(avatar.data, readFileSync(resolve(root, config.avatar.image.path)));
 });
 
 test('whitelisted symlinks and absent files fail closed', (t) => {
@@ -72,4 +75,14 @@ test('source check detects accidental model grants and damaged provenance', (t) 
   assert.ok(checkContent(directory).errors.some((error) => error.includes('llm.model')));
   writeFileSync(resolve(directory, 'skills/video-editing/references/upstream/skills/edit-video/SKILL.original.md'), 'modified');
   assert.ok(checkContent(directory).errors.some((error) => error.includes('Changed upstream original')));
+});
+
+
+test('missing or invalid portraits cannot silently become a character-only package', (t) => {
+  const directory = fixture(t);
+  const avatar = resolve(directory, 'assets/avatar.png');
+  writeFileSync(avatar, 'not an image');
+  assert(checkContent(directory).errors.some((error) => error.includes('transparent RGBA PNG')));
+  unlinkSync(avatar);
+  assert(checkContent(directory).errors.some((error) => error.includes('portrait is missing')));
 });
