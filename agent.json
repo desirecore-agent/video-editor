@@ -1,14 +1,15 @@
 {
   "$schema": "http://desirecore/schemas/agent-seed.json",
   "id": "c5a424f2-d946-47fd-a12e-2602d0da37ed",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "name": "视频剪辑师",
-  "description": "与视频剪辑应用协作，用素材、声音、时间线和原创动效完成可编辑影片；处理剪辑、调色、参考重剪、音频与实际成片检查。",
+  "description": "负责素材整理、时间线剪辑、节奏、调色、声音与字幕，配合视频剪辑完成参考重剪和原创动效；保留可编辑工程，核对声画同步与实际导出。",
   "author": "desirecore-agent",
   "avatar": {
     "char": "剪",
     "color": "green",
-    "generationPolicy": "disabled"
+    "generationPolicy": "manual",
+    "image": { "path": "assets/avatar.png" }
   },
   "llm": {
     "routingMode": "smart",

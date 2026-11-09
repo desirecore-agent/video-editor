@@ -10,7 +10,16 @@ export function checkContent(root) {
   const requireValue = (value, message) => { if (!value) errors.push(message); };
   requireValue(config.$schema === 'http://desirecore/schemas/agent-seed.json', 'Source must use agent-seed Schema.');
   requireValue(config.name === '视频剪辑师' && config.id === 'c5a424f2-d946-47fd-a12e-2602d0da37ed', 'New Agent identity must be preserved.');
-  requireValue(config.avatar?.generationPolicy === 'disabled' && config.avatar?.char === '剪', 'Avatar generation must be disabled with deterministic fallback.');
+  requireValue(config.avatar?.generationPolicy === 'manual' && config.avatar?.char === '剪', 'Bundled avatar must use manual policy with deterministic fallback.');
+  const avatarPath = config.avatar?.image?.path;
+  requireValue(avatarPath === 'assets/avatar.png' && SEED_FILES.includes(avatarPath), 'The portrait must be referenced and included in the distributable seed.');
+  if (avatarPath === 'assets/avatar.png' && existsSync(resolve(root, avatarPath))) {
+    const image = readFileSync(resolve(root, avatarPath));
+    requireValue(image.length <= 2 * 1024 * 1024 && image.length > 33
+      && image.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))
+      && image.subarray(12, 16).toString('ascii') === 'IHDR' && image[25] === 6,
+    'The bundled portrait must be a transparent RGBA PNG within the marketplace limit.');
+  } else requireValue(false, 'The bundled portrait is missing.');
   requireValue(config.llm?.routingMode === 'smart' && config.llm?.smart?.profile?.tier === 'flagship', 'Seed must declare flagship Smart intent.');
   for (const key of ['provider', 'providerId', 'model']) requireValue(!Object.hasOwn(config.llm ?? {}, key), `Must not bind llm.${key}.`);
   for (const key of ['assigned', 'providerPolicy', 'allowedProviderIds', 'tier']) requireValue(!Object.hasOwn(config.llm?.smart ?? {}, key), `Must not persist smart.${key}.`);
