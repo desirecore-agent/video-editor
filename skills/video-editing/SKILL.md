@@ -24,6 +24,17 @@ node skills/video-editing/scripts/video-editing.mjs --app-root <平台返回的�
 
 先看已安装 CLI 的帮助及状态；状态查询不等于启动成功。CLI/MCP 不可用时保留诊断，按已有生命周期恢复，不换成独立上游实例。
 
+### 从平台运行回执完成接入
+
+以下 `connection`、`mcp-config`、`docs` 命令自视频剪辑应用 0.1.6 起提供，先核当前材料的 `--help`；旧材料沿用其同版 runtime-file 合同，不能把缺少新命令误判为服务故障。
+
+1. 用 `AppManage` 找准确安装实例，再用 `AppAuthoring {action:"runtime_read", installation_id:"<实际安装>"}` 读取运行事实。`actions:[]` 只说明 AppManage 没有该项开关动作，不代表平台没有运行管理。
+2. `status:unverified`、`application_runtime_contract_missing` 或应用 `managed:false` 表示正式接入未完成。沿 app-developer 的原 `prepare → runtime_enroll → 停止接纳候选 → commit → runtime_start` 合同恢复；不要为凑齐 runtime-file 自造代际，也不要把一般 Bash 后台进程称为受管应用。
+3. 将实际 `runtime_read` 完整 JSON 回执保存在已授权工作目录，运行当前固定材料的 `node desirecore/cli.mjs connection --binding-file <回执.json>`，把 stdout 保存为连接快照。该命令先核对材料、当前代际和已有服务，不启动应用、不输出 proof。
+4. `node desirecore/cli.mjs mcp-config --runtime-file <连接快照.json>` 返回 MCP 启动配置。通过平台已有 MCP 管理与授权入口为当前 Agent 配置，再发现工具并调用 `fablecut_status`；不能把配置写进可分发 Agent seed，也不能把应用关联当作工具授权。
+
+手册不依赖 MCP 或服务启动：`node desirecore/cli.mjs docs --section "REST API"` 可从同次固定材料读取权威说明；也可读取材料中的 `docs/editor-guide.md`。需要文件访问时只申请必要材料范围，不扩大应用数据根权限。已有 HTTP 通道可依手册使用，工程 PUT 必须提交完整文档并保留并发头；局部修改优先原 MCP ops。
+
 ## 工程并行修改
 
 先读取 `fablecut_status` 和 `fablecut_get_project {compact:true}`，核实当前 `projectId` 与 `revision`。在本适配中，状态只查询现有受管服务，不能自动启动第二个 owner。
@@ -47,6 +58,20 @@ fablecut_patch_project {projectId:"<已读工程>", baseRevision:42, ops:[
 超时表示结果未知：先查原 job，不重复提交。取消请求、job 终态、编码器退出和迟到 begin 的清理分别核实。重启后读取持久回执，明确重试后才重跑，不自动续跑。
 
 成功交付核对实际文件路径、大小、SHA、时长、分辨率、帧率、画面来源和声道/音量；先读取应用回执，再按任务需要用独立探测与播放验证。不得用另一个渲染工具生成文件替代应用导出证明。
+
+`VIDEO_FRAME_UNAVAILABLE` 表示原 job 没有取得指定片段的实际视频帧，不能交付背景加字幕作为成片。保留失败和原片，按任务需要生成明确登记的兼容素材后修改工程再显式导出；预览代理不会成为导出输入。
+
+### 字幕重点着色
+
+此能力需要当前应用手册已声明 `props.emphasis`；旧版不支持时应先沿正常更新流程取得支持的材料，不能只写入未知字段就宣称已着色。
+
+用户要求“重点着色”时，在整句展示期间持续给指定关键词着色。例如文本片段 `props`：
+
+```json
+{"text":"生活就像一杯白开水","textAnim":"none","emphasis":[{"text":"白开水","color":"#ffd166"}]}
+```
+
+`emphasis` 是按字面匹配的关键词与 RGB 颜色列表（最多64项），支持无空格中文；同位置最长匹配优先。它与 `wordTimes`、播放位置无关，重点色优先于瞬时播放词高亮。GUI 的“重点着色”可新增、改色和移除；默认使用静态字幕，不把 karaoke、逐词弹出或轮流变色当作重点着色。先按语义选择重点并核对真实画面，保留可编辑规则。
 
 ## 创作技能
 
