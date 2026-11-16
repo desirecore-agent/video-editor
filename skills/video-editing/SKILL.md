@@ -26,7 +26,7 @@ node skills/video-editing/scripts/video-editing.mjs --app-root <平台返回的�
 
 ### 从平台运行回执完成接入
 
-以下 `connection`、`mcp-config`、`docs` 命令自视频剪辑应用 0.1.6 起提供，先核当前材料的 `--help`；旧材料沿用其同版 runtime-file 合同，不能把缺少新命令误判为服务故障。
+以下 `connection`、`mcp-config`、`docs` 命令自视频剪辑应用 0.1.7 起提供，先核当前材料的 `--help`；旧材料沿用其同版 runtime-file 合同，不能把缺少新命令误判为服务故障。
 
 1. 用 `AppManage` 找准确安装实例，再用 `AppAuthoring {action:"runtime_read", installation_id:"<实际安装>"}` 读取运行事实。`actions:[]` 只说明 AppManage 没有该项开关动作，不代表平台没有运行管理。
 2. `status:unverified`、`application_runtime_contract_missing` 或应用 `managed:false` 表示正式接入未完成。沿 app-developer 的原 `prepare → runtime_enroll → 停止接纳候选 → commit → runtime_start` 合同恢复；不要为凑齐 runtime-file 自造代际，也不要把一般 Bash 后台进程称为受管应用。
@@ -63,7 +63,7 @@ fablecut_patch_project {projectId:"<已读工程>", baseRevision:42, ops:[
 
 ### 字幕重点着色
 
-此能力需要当前应用手册已声明 `props.emphasis`；旧版不支持时应先沿正常更新流程取得支持的材料，不能只写入未知字段就宣称已着色。
+此能力自视频剪辑应用 0.1.7 起提供，仍需当前材料手册已声明 `props.emphasis`；旧版不支持时应先沿正常更新流程取得支持的材料，不能只写入未知字段就宣称已着色。
 
 用户要求“重点着色”时，在整句展示期间持续给指定关键词着色。例如文本片段 `props`：
 

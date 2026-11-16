@@ -16,6 +16,8 @@ node skills/video-editing/scripts/video-editing.mjs --app-root <实际材料根>
 
 同一 CLI 的 `identity --runtime-file <快照>` 核身份；`mcp --runtime-file <快照>` 启动仅附着现有服务的 stdio MCP。通过平台 MCP 管理配置此命令；不要直接运行上游 `mcp-server.js`。CLI 每次核 `/api/desirecore/instance`、`/api/desirecore/runtime-identity` 的数据根、端口和本代字段，旧代际必须失败。
 
+应用 0.1.7 起提供从当前平台运行回执生成连接快照、MCP 配置的辅助命令及字幕重点着色，具体操作见[受管应用技能](skills/video-editing/SKILL.md)。旧版先核同版帮助，按正常更新流程取得所需能力。
+
 包装器自身不自动启动服务或下载软件；当前应用 CLI 负责核对其运行身份。平台重启或应用升级后重新读取当前代际，再配置/调用。
 
 工程写入前读取 `projectId` 和 `revision`，按当前工具 Schema 提交 `baseRevision`。冲突后读取并合并人工编辑。开启其他工程或序列会改变用户视图，按任务意图操作并说明变化。
