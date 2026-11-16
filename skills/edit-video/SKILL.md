@@ -89,6 +89,12 @@ switching their view, use `addSequence` + `inSequence` as above instead. It
 leaves titles, picture-in-picture and clips placed by hand alone and lists
 them: look at those with `fablecut_frame` on the new canvas and move them.
 
+## 中文口播
+
+- 语言已由用户或素材确认时，先对人声片段调用 `fablecut_transcribe {clipIds:[…], language:"zh"}`。短片、开头静音或中英混读可能误导自动识别；已有错误转写时用 `again:true` 重跑。对照有声段和原声确认术语、否定词及数字，再据此删句或定字幕。
+- 多个搜索词用 `find:["示例词一","示例词二"]`。片段 ID 列表也传 JSON 数组。把数组写成一整段带引号的文本会被当成单个搜索词，或者在必需数组的位置被拒绝。遇到拒绝先改正参数；需要逐项调用时，每次改动后重新读取工程版本和时间点。
+- 优先收紧多余停顿，剪接后再按用户要求调整语速并复核语意、口型和听感。字幕以最终时间线生成，断在自然语意处，避开人脸和手机界面遮挡区。关键词着色、关键帧推近或划线按语意取舍。导出前抽查开头、切点和结尾的字幕、画面和声音。
+
 ## Things that trip people up
 
 - Cut, ripple, trim and insert with the `fablecut_patch_project` edit ops
