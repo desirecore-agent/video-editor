@@ -31,7 +31,8 @@ node skills/video-editing/scripts/video-editing.mjs --app-root <平台返回的�
 1. 用 `AppManage` 找准确安装实例，再用 `AppAuthoring {action:"runtime_read", installation_id:"<实际安装>"}` 读取运行事实。`actions:[]` 只说明 AppManage 没有该项开关动作，不代表平台没有运行管理。
 2. `status:unverified`、`application_runtime_contract_missing` 或应用 `managed:false` 表示正式接入未完成。沿 app-developer 的原 `prepare → runtime_enroll → 停止接纳候选 → commit → runtime_start` 合同恢复；不要为凑齐 runtime-file 自造代际，也不要把一般 Bash 后台进程称为受管应用。
 3. 将实际 `runtime_read` 完整 JSON 回执保存在已授权工作目录，运行当前固定材料的 `node desirecore/cli.mjs connection --binding-file <回执.json>`，把 stdout 保存为连接快照。该命令先核对材料、当前代际和已有服务，不启动应用、不输出 proof。
-4. `node desirecore/cli.mjs mcp-config --runtime-file <连接快照.json>` 返回 MCP 启动配置。通过平台已有 MCP 管理与授权入口为当前 Agent 配置，再发现工具并调用 `fablecut_status`；不能把配置写进可分发 Agent seed，也不能把应用关联当作工具授权。
+4. `node desirecore/cli.mjs mcp-config --runtime-file <连接快照.json>` 返回通用 stdio 启动描述 `{command,args,cwd}`，不是完整的 DesireCore MCP 配置。通过现有可信 MCP 配置界面，或在当前授权允许时用已有 `HttpRequest` 调用当前平台的 `POST /api/agents/<实际 Agent ID>/mcp-servers`。请求体为 `{serverId:"video-editing",config:{transport:"stdio",command:<返回值>,args:<返回的完整数组>,cwd:<返回值>}}`，占位值必须换成 CLI 实际返回值；不能原样提交仅有三个字段的启动描述。严格 `config` 不另加 `enabled`，由原配置 owner 写入启用状态。
+5. 经原 owner 写入成功后，在下一正常轮次重新发现工具并真实调用 `fablecut_status`，核对同一实例后才算接入完成。不能用 Bash 直接改 `agent.json` 绕开配置锁、把配置写进可分发 seed，或把应用关联当作工具授权。不要读取/传递平台 token 或伪造 Origin；原调用返回 401/403 时保留失败，转可信 MCP 配置界面处理。
 
 手册不依赖 MCP 或服务启动：`node desirecore/cli.mjs docs --section "REST API"` 可从同次固定材料读取权威说明；也可读取材料中的 `docs/editor-guide.md`。需要文件访问时只申请必要材料范围，不扩大应用数据根权限。已有 HTTP 通道可依手册使用，工程 PUT 必须提交完整文档并保留并发头；局部修改优先原 MCP ops。
 
