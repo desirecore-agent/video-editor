@@ -1,7 +1,7 @@
 {
   "$schema": "http://desirecore/schemas/agent-seed.json",
   "id": "c5a424f2-d946-47fd-a12e-2602d0da37ed",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "name": "视频剪辑师",
   "description": "负责素材整理、时间线剪辑、节奏、调色、声音与字幕，配合视频剪辑完成参考重剪和原创动效；保留可编辑工程，核对声画同步与实际导出。",
   "author": "desirecore-agent",

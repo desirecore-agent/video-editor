@@ -16,6 +16,10 @@ node skills/video-editing/scripts/video-editing.mjs --app-root <实际材料根>
 
 同一 CLI 的 `identity --runtime-file <快照>` 核身份；`mcp --runtime-file <快照>` 启动仅附着现有服务的 stdio MCP。通过平台 MCP 管理配置此命令；不要直接运行上游 `mcp-server.js`。CLI 每次核 `/api/desirecore/instance`、`/api/desirecore/runtime-identity` 的数据根、端口和本代字段，旧代际必须失败。
 
+`mcp-config` 返回 `{command,args,cwd}` 启动描述；DesireCore 的配置还须包含 `transport:"stdio"`。现有授权允许时，可用 `HttpRequest` 向当前平台 `POST /api/agents/<实际 Agent ID>/mcp-servers`，请求体为 `{serverId:"video-editing",config:{transport:"stdio",command:<CLI返回值>,args:<CLI完整数组>,cwd:<CLI返回值>}}`；否则用可信 MCP 配置界面。不要在严格 `config` 中加 `enabled`，原 owner 会写入启用状态。401/403 转可信配置界面，不读取/传递平台 token、伪造 Origin 或用 Bash 改 `agent.json` 绕锁。写入成功后，下一正常轮次重新发现并真实调用 `fablecut_status` 才证明连接可用；完整方法见[受管应用技能](skills/video-editing/SKILL.md)。
+
+应用 0.1.7 起提供从当前平台运行回执生成连接快照、MCP 配置的辅助命令及字幕重点着色，具体操作见[受管应用技能](skills/video-editing/SKILL.md)。旧版先核同版帮助，按正常更新流程取得所需能力。
+
 包装器自身不自动启动服务或下载软件；当前应用 CLI 负责核对其运行身份。平台重启或应用升级后重新读取当前代际，再配置/调用。
 
 工程写入前读取 `projectId` 和 `revision`，按当前工具 Schema 提交 `baseRevision`。冲突后读取并合并人工编辑。开启其他工程或序列会改变用户视图，按任务意图操作并说明变化。

@@ -26,6 +26,8 @@ node scripts/package-seed.mjs --output <new-file.zip>
 
 The deterministic packager includes exactly 21 named source files (including the portrait and its provenance) under `video-editor/`, rejects symlinks, and refuses to overwrite an existing output. Never package a PoC export or an entire working directory. Use the actual platform import result as the local Agent ID; `agent.json.id` is a fresh source UUID.
 
+Agent 0.1.2 requires video-editing 0.1.7 or later for the connection handoff helpers and persistent keyword colours. Verify support in the current material’s CLI help and manual before use.
+
 Application association is an entry preference. Tool, file, MCP, model, credential and lifecycle authority remain subject to platform governance. The seed configures no servers or privileged tools. See [usage](USAGE.md) for connecting the same current-generation instance.
 
 ## Contents

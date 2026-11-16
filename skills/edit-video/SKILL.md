@@ -104,7 +104,7 @@ them: look at those with `fablecut_frame` on the new canvas and move them.
   the pauses. Whisper leaves out most "um"s, so don't hunt fillers by text.
   Lock the music lane before either cut. Caption it last:
   `fablecut_captions {style:"highlight", clipIds:[…the speech clips]}` (or subtitle,
-  karaoke, pop), then look at a frame mid-sentence.
+  karaoke, pop), then look at a frame mid-sentence. For “重点着色” / persistent keyword colour, use subtitle style with `textAnim:"none"` and set `props.emphasis:[{text:"<keyword>",color:"#ffd166"}]` using updateClip. These rules stay coloured throughout the caption; the current-word highlight animation does not satisfy that request.
 - Choose a coherent type system that suits the footage and language; `fablecut_docs {section:"Text"}`
   lists the built-in title styles.
 - **Grade** with the `setGrade` patch op (`props.grade`: exposure, temp / tint,
