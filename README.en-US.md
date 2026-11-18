@@ -35,7 +35,7 @@ Application association is an entry preference. Tool, file, MCP, model, credenti
 - `video-editing`: managed application discovery, identity, revisions, MCP and export receipts.
 - `edit-video`: cuts, sound, captions, grading, transitions, speed changes and export.
 - `motion-graphics`: shapes, parenting, motion paths, compositions, templates and keyframes.
-- `remake-reel`: reference rhythm analysis and rebuilding with the user's footage.
+- `remake-reel`: compare reference visuals, speech, graphic timing and sound; rebuild with the user's footage and repeat from new projects.
 
 The latter three reuse FableCut's MIT skills. Original files, fixed commit and hashes are preserved in the [source record](skills/video-editing/references/upstream/SOURCE.json). Timeline/tool grammar is retained; managed lifecycle, project revision and receipt guidance are adapted. The compatible `fablecut_` tool prefix does not require an independent upstream server.
 

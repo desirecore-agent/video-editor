@@ -37,7 +37,7 @@ Agent 与应用的关联仅是入口偏好。实际工具、文件、MCP、模�
 - `video-editing`：受管应用定位、身份、版本、MCP 和导出回执。
 - `edit-video`：修剪、声画、字幕、调色、转场、变速和导出。
 - `motion-graphics`：形状、父子关系、运动路径、合成、模板与关键帧。
-- `remake-reel`：参考片节奏分析与用户素材重剪。
+- `remake-reel`：参考片画面、台词、图卡时序与声音对照，用户素材重剪及新工程重复验证。
 
 后三项直接改编自 FableCut 的 MIT 技能，原文、固定 commit 与 SHA 保留在 [来源清单](skills/video-editing/references/upstream/SOURCE.json)。时间线和工具语法保持复用，状态、工程版本、受管运行与回执说明按正式应用适配。工具保留 `fablecut_` 兼容前缀，不要求启动上游独立服务。
 
