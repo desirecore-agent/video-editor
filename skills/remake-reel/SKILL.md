@@ -39,8 +39,9 @@ and `drop` — the biggest detected energy rise. Speech can also produce periodi
 peaks; these numbers do not prove there is music.
 
 Optional audio extraction registers the reference's **entire audio track** as media.
-It does not separate music from speech. For talking-head references, use `music:false`
-when extraction is unnecessary. Before reusing extracted audio, check its contents
+It does not separate music from speech. For talking-head references, use MCP
+`registerMusic:false` when extraction is unnecessary (`music:false` is the REST/analysis option).
+Before reusing extracted audio, check its contents
 and the user's authorization; never layer reference narration over the source
 speaker as if it were an instrumental bed.
 
