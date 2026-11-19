@@ -9,7 +9,9 @@
     "char": "剪",
     "color": "green",
     "generationPolicy": "manual",
-    "image": { "path": "assets/avatar.png" }
+    "image": {
+      "path": "assets/avatar.png"
+    }
   },
   "llm": {
     "routingMode": "smart",
@@ -46,7 +48,9 @@
     "动效",
     "音频混音",
     "字幕",
-    "参考视频"
+    "参考视频",
+    "Shotcraft",
+    "镜头卡"
   ],
   "default_enabled": {
     "skills": [
