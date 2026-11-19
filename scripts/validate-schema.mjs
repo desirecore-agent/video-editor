@@ -15,6 +15,11 @@ addFormats(ajv);
 const validate = ajv.compile(agentSeedConfigSchema);
 const config = JSON.parse(readFileSync(resolve(agentRoot, 'agent.json'), 'utf8'));
 if (!validate(config)) throw new Error(`Agent seed Schema rejected source: ${JSON.stringify(validate.errors)}`);
+const shotcraftRoot = resolve(agentRoot, 'skills/motion-graphics/references/shotcraft');
+const validateCatalog = ajv.compile(JSON.parse(readFileSync(resolve(shotcraftRoot, 'catalog.schema.json'), 'utf8')));
+if (!validateCatalog(JSON.parse(readFileSync(resolve(shotcraftRoot, 'catalog.json'), 'utf8')))) {
+  throw new Error(`Shotcraft catalog Schema rejected source: ${JSON.stringify(validateCatalog.errors)}`);
+}
 for (const id of config.default_enabled?.skills ?? []) {
   const parsed = parseSkillMarkdown(readFileSync(resolve(agentRoot, 'skills', id, 'SKILL.md'), 'utf8'), id, 'zh-CN');
   if (!parsed.valid || parsed.metadata.name !== id || !parsed.metadata.description) throw new Error(`Skill ${id}: ${JSON.stringify(parsed.validationErrors ?? parsed.metadata)}`);
@@ -22,4 +27,4 @@ for (const id of config.default_enabled?.skills ?? []) {
 const platformSha = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: platformRoot, encoding: 'utf8' }).trim();
 const sha256 = (file) => createHash('sha256').update(readFileSync(file)).digest('hex');
 const sourceFiles = Object.fromEntries(['packages/schemas/src/agent/agent-config.ts', 'packages/agent-service/src/skills/parser.ts'].map((file) => [file, sha256(resolve(platformRoot, file))]));
-console.log(JSON.stringify({ agentSeedSchema: 'passed', skillParser: 'passed', skills: config.default_enabled.skills.length, node: process.version, platformRoot, platformSha, sourceFiles, agentConfigSha256: sha256(resolve(agentRoot, 'agent.json')) }));
+console.log(JSON.stringify({ agentSeedSchema: 'passed', shotcraftCatalogSchema: 'passed', skillParser: 'passed', skills: config.default_enabled.skills.length, node: process.version, platformRoot, platformSha, sourceFiles, agentConfigSha256: sha256(resolve(agentRoot, 'agent.json')) }));

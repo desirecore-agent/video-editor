@@ -26,7 +26,7 @@ DesireCore 的独立 Agent 内容源。配合 [视频剪辑](https://github.com/
 node scripts/package-seed.mjs --output <新文件.zip>
 ```
 
-打包器只收明确列出的 21 个源文件（包含头像与来源说明），固定 ZIP 根为 `video-editor/`，拒绝符号链接和覆盖已有输出。不要导出 PoC 实例或递归压缩工作目录。实际本地 Agent ID 以当前平台导入结果为准；`agent.json.id` 是新的内容源 UUID。
+打包器只收明确清单中的源文件（包含头像、镜头参考和来源说明），固定 ZIP 根为 `video-editor/`，拒绝符号链接和覆盖已有输出。不要导出 PoC 实例或递归压缩工作目录。实际本地 Agent ID 以当前平台导入结果为准；`agent.json.id` 是新的内容源 UUID。
 
 Agent 0.1.2 的连接交接辅助命令与字幕重点着色需要视频剪辑应用 0.1.7 或更高版本；使用前仍以当前材料的 CLI 帮助和手册核实能力。
 
@@ -36,10 +36,12 @@ Agent 与应用的关联仅是入口偏好。实际工具、文件、MCP、模�
 
 - `video-editing`：受管应用定位、身份、版本、MCP 和导出回执。
 - `edit-video`：修剪、声画、字幕、调色、转场、变速和导出。
-- `motion-graphics`：形状、父子关系、运动路径、合成、模板与关键帧。
+- `motion-graphics`：形状、父子关系、运动路径、合成、模板与关键帧；按需检索 Shotcraft 124 卡 / 150 样式、准确 demo 源码和音效选材工具。
 - `remake-reel`：参考片画面、台词、图卡时序与声音对照，用户素材重剪及新工程重复验证。
 
 后三项直接改编自 FableCut 的 MIT 技能，原文、固定 commit 与 SHA 保留在 [来源清单](skills/video-editing/references/upstream/SOURCE.json)。时间线和工具语法保持复用，状态、工程版本、受管运行与回执说明按正式应用适配。工具保留 `fablecut_` 兼容前缀，不要求启动上游独立服务。
+
+[Shotcraft 适配指南](skills/motion-graphics/references/shotcraft/README.md)说明固定来源、帧率/坐标换算、原生能力边界、音效许可和独立终检。参考资料与原始源码随 seed 分发，未附画廊媒体、依赖或第二渲染器；150 样式不等于全部已原生验证。
 
 Smart 默认使用 `flagship`、`tool_use` 与 `vision` 能力意图，不指定 Provider 或具体模型，也不声明 Provider ceiling。真实路由在 Run 启动时确定；Smart tier 不代表预算上限。头像使用随包分发的[原创透明职业肖像](assets/README.md)，`generationPolicy: manual`，保留“剪”字回落；安装不自动发起图像生成。
 
@@ -56,4 +58,4 @@ node scripts/validate.mjs --desirecore-root <已审阅的当前DesireCore检出>
 
 ## 许可
 
-[MIT](LICENSE)。上游技能 Copyright (c) 2026 ronak-create，完整许可见 [FableCut MIT](licenses/FableCut-MIT.txt)。
+原创内容 [MIT](LICENSE)。Shotcraft 参考资料及工具为 [Apache-2.0](licenses/VideoShotcraft-Apache-2.0.txt)，音频逐素材许可；完整署名见 [NOTICE](NOTICE)。上游技能 Copyright (c) 2026 ronak-create，完整许可见 [FableCut MIT](licenses/FableCut-MIT.txt)。

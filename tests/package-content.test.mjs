@@ -42,7 +42,9 @@ test('archive is deterministic and contains only explicit distributable source',
   assert.deepEqual(archive.bytes, buildSeedArchive(directory).bytes);
   const entries = zipEntries(archive.bytes);
   assert.deepEqual(entries.map(({ name }) => name), SEED_FILES.map((name) => `${SEED_ROOT}/${name}`));
-  assert.equal(entries.length, 21);
+  assert.equal(entries.length, SEED_FILES.length);
+  assert.ok(entries.some(({ name }) => name.endsWith('/shotcraft/catalog.json')));
+  assert.ok(!entries.some(({ name }) => /\.(?:mp4|wav|mp3)$/.test(name)));
   for (const { name, data } of entries) {
     assert.ok(!name.includes('..') && !name.startsWith('/'));
     const record = archive.entries.find((entry) => entry.name === name);
