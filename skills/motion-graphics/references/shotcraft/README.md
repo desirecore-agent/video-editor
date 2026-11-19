@@ -16,6 +16,8 @@ node scripts/shotcraft.mjs show marker-underline-title marker-underline-title
 
 先在 [catalog.json](catalog.json) 查用途、能量、卡名及准确 `style-key`，再读取返回的卡片原文和它定位的准确 demo TSX。名称相近不等于同一变体。`demos: []` 表示导入器没能定位 demo，必须从原文及固定上游树核实，不能编造实现或声称复现。动态样片未随包分发；需要核对运动时读取上游对应样片或用户参考，无法取得就标为无法验证。
 
+`show` 的 `demoFiles` 是卡片原文实际提到的源码候选；`demoLocatorScope: card` 明确其作用域。`requiresVariantResolution: true` 时，按所选变体的原文章节及注册入口核准准确 TSX，不能把卡片下的任意文件当成该样式。目录不伪造未核验的逐样式源码绑定。
+
 每卡初始 `nativeStatus: reference-only`。这代表资料可用，**不代表这 150 种样式均已在视频剪辑中运行成功**。一次原生短片通过只证明对应实现、应用版本、素材和输出规格；在工作目录保存该证据，不回写成全库支持保证。
 
 ## 将运动语法变成当前应用的数据
@@ -51,6 +53,8 @@ python -X utf8 references/shotcraft/upstream/assets/scripts/sfx-source.py analyz
 ```
 
 候选搜索只返回素材页/试听入口；选择后再按工具帮助执行 `get` 并正常导入应用。每个实际素材保留素材页、作者、确切许可 URL/版本、预览或原文件标记、哈希及所需署名；未知许可和 BY-NC 不能视作可发布素材。代码 Apache-2.0 不覆盖音频。离线分析需要可用 FFmpeg/ffprobe，10ms RMS 与样本峰值不是 LUFS、真峰或试听结论。
+
+分析前从当前安装/已准备运行时确认 FFmpeg、ffprobe 和 Python 的实际位置，必要时仅为本次命令设置 PATH。不要把开发机的全局安装当作市场安装保证，也不为运行参考脚本修改系统环境或新起编辑服务。
 
 声音对齐分别记录素材自身峰值滞后和实际输出音轨偏移。上游 Remotion/AAC 的补偿常数不能套到当前应用。用户片无 BGM 时只交付所需版本，不为满足上游产品片模板额外混音；输出仍检查整 mix、接点、原话和用户要求的响度。
 

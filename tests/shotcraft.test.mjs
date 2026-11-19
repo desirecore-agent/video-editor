@@ -22,6 +22,10 @@ test('lookup resolves a real card/style and rejects invented variants', () => {
   assert.equal(card.nativeStatus, 'reference-only');
   assert.ok(card.demoFiles.some((f) => f.endsWith('MarkerUnderlineTitle.tsx')));
   assert.ok(card.documentFile.endsWith('marker-underline-title.md'));
+  assert.equal(card.demoLocatorScope, 'card');
+  assert.equal(card.requiresVariantResolution, false);
+  const multiple = JSON.parse(run(root, 'show', 'spotlight-sweep-moves', 'slide-spotlight-pan').stdout);
+  assert.equal(multiple.requiresVariantResolution, true);
   assert.notEqual(run(root, 'show', 'marker-underline-title', 'invented-style').status, 0);
   assert.notEqual(run(root, 'find', 'paper', '--category', 'invented-category').status, 0);
 });
@@ -36,8 +40,10 @@ test('source hashes and capability claims fail on damaged originals or catalog d
   assert.ok(checkShotcraft(directory).some((e) => e.includes('Changed Shotcraft original')));
   const catalog = JSON.parse(readFileSync(resolve(directory, base, 'catalog.json'), 'utf8'));
   catalog.cards[0].nativeStatus = 'verified';
+  catalog.cards[0].demos = catalog.cards[1].demos;
   writeFileSync(resolve(directory, base, 'catalog.json'), JSON.stringify(catalog));
   assert.ok(checkShotcraft(directory).some((e) => e.includes('must not claim native verification')));
+  assert.ok(checkShotcraft(directory).some((e) => e.includes('demo locator drift')));
 });
 
 test('distributed ZIP alone contains a working offline lookup and exact selected demo', (t) => {

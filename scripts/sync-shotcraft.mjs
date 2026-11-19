@@ -5,6 +5,7 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
+import { referencedDemos } from './shotcraft-catalog.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const source = process.argv[2];
@@ -29,8 +30,7 @@ for (const path of selected.sort()) {
 const original = JSON.parse(readFileSync(resolve(root, `${base}/upstream/gallery/api/library.json`), 'utf8'));
 const cards = original.cards.map((card) => {
   const doc = readFileSync(resolve(root, `${base}/upstream/${card.source}`), 'utf8');
-  const mentions = [...doc.matchAll(/demos\/[\w/-]+(?:\.tsx)?/g)].map(([s]) => s.replace(/\/$/, ''));
-  const demos = records.filter((r) => r.path.startsWith('demos/') && mentions.some((p) => r.path === p || r.path.startsWith(p + '/'))).map((r) => r.path);
+  const demos = referencedDemos(doc, records.map((r) => r.path));
   return { name: card.name, category: card.category, summary: card.summary, use: card.use || '', duration: card.duration || '',
     energy: card.energy || '', intention: card.intention || '', document: card.source, demos,
     styles: card.styles.map((s) => ({ key: s.key, label: s.label, description: s.description || '', use: s.use || '' })),

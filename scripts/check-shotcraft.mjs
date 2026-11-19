@@ -3,6 +3,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { createHash } from 'node:crypto';
 import { SHOTCRAFT_FILES } from './shotcraft-files.mjs';
+import { referencedDemos } from './shotcraft-catalog.mjs';
 
 export function checkShotcraft(root) {
   const errors = [], base = 'skills/motion-graphics/references/shotcraft';
@@ -34,6 +35,11 @@ export function checkShotcraft(root) {
       }
       need(card.nativeStatus === 'reference-only', `Source catalog must not claim native verification: ${card.name}`);
       for (const name of [card.document, ...card.demos]) need(source.files.some((f) => f.path === name) && existsSync(resolve(root, `${base}/upstream/${name}`)), `Missing Shotcraft reference: ${name}`);
+      const documentSource = source.files.find((f) => f.path === card.document && SHOTCRAFT_FILES.includes(f.destination));
+      if (documentSource) {
+        const expectedDemos = referencedDemos(read(documentSource.destination).toString('utf8'), source.files.map((f) => f.path));
+        need(JSON.stringify(card.demos) === JSON.stringify(expectedDemos), `Shotcraft demo locator drift: ${card.name}`);
+      }
     }
     need(read('licenses/VideoShotcraft-Apache-2.0.txt').toString('utf8').includes('Apache License'), 'Complete Shotcraft Apache license is required.');
     need(read('NOTICE').toString('utf8').includes('Vincentwei1021/video-shotcraft'), 'Shotcraft attribution is required.');

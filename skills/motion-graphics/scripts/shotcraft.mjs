@@ -23,7 +23,8 @@ if (action === 'find') {
   if (styleOrFlag && !style) throw new Error('Style does not belong to this card');
   console.log(JSON.stringify({ commit: catalog.commit, ...card, ...(style ? { selectedStyle: style } : {}),
     documentFile: resolve(base, 'upstream', card.document), demoFiles: card.demos.map((p) => resolve(base, 'upstream', p)),
-    note: 'Read the exact card and demo; source availability does not certify native support or a visual match.' }, null, 2));
+    demoLocatorScope: 'card', requiresVariantResolution: card.styles.length !== 1 || card.demos.length !== 1,
+    note: 'demoFiles are candidates referenced by this card. Resolve the selected style against its document/registration and exact source before use; this is not native or visual validation.' }, null, 2));
 } else {
   throw new Error('Usage: node scripts/shotcraft.mjs find <keywords> [--category <category>] | show <card> [style-key]');
 }
