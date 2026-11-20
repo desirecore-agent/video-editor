@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { resolve, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
 import { spawnSync } from 'node:child_process';
 import { checkContent } from './content-check.mjs';
@@ -12,7 +12,7 @@ try {
   const result = checkContent(root);
   if (result.errors.length) throw new Error(result.errors.join('\n'));
   const requirePlatform = createRequire(resolve(platformRoot, 'package.json'));
-  const validation = spawnSync(process.execPath, ['--import', requirePlatform.resolve('tsx'), resolve(root, 'scripts/validate-schema.mjs'), platformRoot, root], {
+  const validation = spawnSync(process.execPath, ['--import', pathToFileURL(requirePlatform.resolve('tsx')).href, resolve(root, 'scripts/validate-schema.mjs'), platformRoot, root], {
     cwd: platformRoot, env: { ...process.env, TSX_TSCONFIG_PATH: resolve(platformRoot, 'tsconfig.json') }, stdio: 'inherit', shell: false,
   });
   if (validation.error) throw validation.error;

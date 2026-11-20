@@ -1,0 +1,178 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "固定来源镜头参考目录",
+  "description": "用于按需检索，reference-only不是原生支持承诺。原始镜头及样式身份须与固定上游目录一致。",
+  "type": "object",
+  "required": [
+    "description",
+    "repository",
+    "commit",
+    "counts",
+    "categories",
+    "cards"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "本地Draft-07 Schema入口"
+    },
+    "description": {
+      "type": "string",
+      "description": "用途及可验证范围"
+    },
+    "repository": {
+      "type": "string",
+      "description": "固定上游仓库",
+      "const": "https://github.com/Vincentwei1021/video-shotcraft"
+    },
+    "commit": {
+      "type": "string",
+      "description": "已审阅固定commit",
+      "const": "075b548c2405a07b77129eb448b0b504fc60dea3"
+    },
+    "counts": {
+      "type": "object",
+      "description": "实际卡片及变体数量",
+      "required": [
+        "cards",
+        "styles"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "cards": {
+          "type": "integer",
+          "description": "卡片数",
+          "const": 124
+        },
+        "styles": {
+          "type": "integer",
+          "description": "变体数",
+          "const": 150
+        }
+      }
+    },
+    "categories": {
+      "type": "object",
+      "description": "上游分类及显示名",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "zh",
+          "en"
+        ],
+        "properties": {
+          "zh": {
+            "type": "string",
+            "description": "中文分类"
+          },
+          "en": {
+            "type": "string",
+            "description": "英文分类"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "cards": {
+      "type": "array",
+      "description": "镜头原文、样式及准确源码入口",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "category",
+          "summary",
+          "use",
+          "duration",
+          "energy",
+          "intention",
+          "document",
+          "demos",
+          "styles",
+          "nativeStatus"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "真实上游卡名"
+          },
+          "category": {
+            "type": "string",
+            "description": "上游分类键"
+          },
+          "summary": {
+            "type": "string",
+            "description": "视觉与动作概要"
+          },
+          "use": {
+            "type": "string",
+            "description": "适用的叙事用途"
+          },
+          "duration": {
+            "type": "string",
+            "description": "源配方时长与帧率，适配时换算成秒"
+          },
+          "energy": {
+            "type": "string",
+            "description": "动效能量，不能替代实际观察"
+          },
+          "intention": {
+            "type": "string",
+            "description": "视觉动作表达的含义"
+          },
+          "document": {
+            "type": "string",
+            "description": "相对upstream的原文路径"
+          },
+          "demos": {
+            "type": "array",
+            "description": "原文定位的TSX源码，空时必须另核实",
+            "items": {
+              "type": "string",
+              "description": "相对upstream的demo路径"
+            }
+          },
+          "styles": {
+            "type": "array",
+            "description": "此卡真实样式，不得借用另一卡同名变体",
+            "items": {
+              "type": "object",
+              "required": [
+                "key",
+                "label",
+                "description",
+                "use"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "description": "准确style-key"
+                },
+                "label": {
+                  "type": "string",
+                  "description": "显示名称"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "变体动作说明"
+                },
+                "use": {
+                  "type": "string",
+                  "description": "该变体的用途"
+                }
+              }
+            }
+          },
+          "nativeStatus": {
+            "type": "string",
+            "description": "资料可用，不代表在当前应用原生验证",
+            "const": "reference-only"
+          }
+        }
+      }
+    }
+  }
+}

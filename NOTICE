@@ -14,3 +14,17 @@ Changes: DesireCore skill metadata, managed application identity/lifecycle,
 project revision preconditions, export receipts, and permission boundaries.
 The fablecut_ tool prefix is retained for protocol compatibility.
 No upstream service, model runtime, user data or credentials are included.
+
+Video-shotcraft reference catalog, card documents, demo/component source and
+SFX sourcing helper: Vincentwei1021/video-shotcraft contributors, Apache-2.0.
+Source: https://github.com/Vincentwei1021/video-shotcraft
+Commit: 075b548c2405a07b77129eb448b0b504fc60dea3
+The full upstream license is licenses/VideoShotcraft-Apache-2.0.txt.
+Unmodified Git blobs and their hashes are recorded in
+skills/motion-graphics/references/shotcraft/SOURCE.json.
+Changes: a separate DesireCore adaptation guide, offline catalog/lookup and
+source-only distribution. Original source files are not modified. Demo source
+is reference material, not a bundled or independently launched renderer.
+Apache-2.0 does not cover third-party audio; each selected audio asset requires
+its own license and attribution. Remotion and other dependencies are not
+distributed here and retain their separate license requirements.

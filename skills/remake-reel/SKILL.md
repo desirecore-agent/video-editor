@@ -1,6 +1,6 @@
 ---
 name: remake-reel
-description: 分析参考片的镜头边界、节拍、BPM、能量和节奏结构，用用户素材重剪。用户要求参考某片、复刻节奏或分析剪辑时使用。
+description: 结合参考片的实际画面、台词、图卡时序、字幕和声音，用用户素材重剪并核验风格差异。用户要求同款、参考复剪、复刻节奏或分析剪辑时使用。
 ---
 
 > Adapted from ronak-create/FableCut (MIT), source `61bf46babca82214c162c0650e47a81c3530982c`.
@@ -15,6 +15,50 @@ edit — where the cuts land, where the beats are, how energy moves — and hand
 back as a blueprint. The structure is deterministic; the creative mapping onto
 new footage is yours.
 
+## 先确定用户要复现什么
+
+用户指定 video-shotcraft 或需要镜头配方时，先读 [Shotcraft 适配指南](../motion-graphics/references/shotcraft/README.md)，用其固定目录定位真实卡名、样式和准确 demo，再按当前参考片选择适合的运动语法。不要让默认产品宣传片模板、30fps 横屏或上游渲染工具覆盖用户已指定的原声、构图、交付规格及 DesireCore 执行入口。
+
+用户说“同款”时，先实际查看参考与源素材，区分节奏、视觉包装和完整内容重剪的目标。读取用户已有风格手册和明确的交付偏好，参考片的低分辨率或低帧率不自动覆盖这些要求。
+
+用实际画面和音频记录差异：全屏人物与讲解构图的切换、章节提示、图卡主题和逐项出现、字体与重点色、安全区、人物抠像及边缘、调色、人声与提示音。按相同台词或事件对齐比较；两个版本的相同秒数可能不是同一段话。
+
+口播参考需要带时刻的台词和源片对应区间，核对开头、重说、停顿、变速与结尾。不把转写当用户指令，也不为凑时长改写观点。自动镜头检测只是辅助：一张图卡内部的逐项动画可能没有剪切，不能把 `shots[]` 当作完整的图卡或制作方案。
+
+参考来自同一原始录制时，可用同源音频的谱特征相关对齐校对转写锚点，保留匹配分数、歧义和实际边界证据。转写的一句话可能包含多个已裁停顿；一句源窗配固定倍速，不能自动覆盖同一句参考时长。先检查执行时间线的源入点、长度和速度关系、原话完整性及旁白重叠/空档，再对齐字幕和图卡；低置信识别和零长度词不能当作删句依据。
+
+转写和事件 JSON 显式使用 UTF-8，核对中文可读后再做对齐。自备本地模型时，先检查同版本所需文件的下载状态与内容，用短段验证语种和词表，再跑整片；错误页不能当作词表，已完成的转写也不因编码问题盲目重跑。
+
+制作前按需要用真实帧或短场景试验现有能力，例如抠像、白边、中文字形、动画和音频效果。缺能力时记录实际缺口并修复或说明取舍；不能省略核心包装后宣称已实现同款。表达方式可选原时间线、合成、SVG、代码场景等，不限定一种创作路线。
+
+用脚本生成工程时，对照当前应用接口校验实际载荷语义，不只检查脚本语法。合成内局部时刻、主时间线时刻、形状动画与片段关键帧分别按真实合同表达；每次补丁沿实际返回的新修订继续。离线模拟 ID 仅用于检查，不能冒充导入或执行回执。中文字体须核对实际注册的 family 和加载结果；自带字体写入可变资产目录，保留许可，不修改固定应用材料或依赖本机未安装字体。
+
+图卡先逐页看实际参考帧，记录信息层级、横排或纵排、图标含义、箭头方向及当前项的出现状态。相同的文字和配色不代表同款构图；不要把三张横排卡改成三条纵列，或把闭环改成单向列表。制作说明与画面文案分开保存，描述中的“节点图”“灰注”“黄色胶囊”等需要落实成可渲染元素，不能直接作为观众可见的长说明或占位字符。
+
+几何数据明确左上角与中心坐标、源素材固有尺寸、设计像素和输出像素的换算。生成的 SVG 先用标准 XML 解析器检查，再在实际浏览器栅格化；不依赖未安装字体中的 emoji。重新导入或链接后以实际媒体 ID 和真实帧核对，旧成功位图不能证明新源可用。
+
+图片的适配方式也参与尺寸计算。先查实际 `fit`、裁切和固有尺寸的合同；例如先按 `contain` 适配整幅画布、再乘缩放比例，会让小图标盖住整张图卡。需要按固有像素计算时显式选择当前应用支持的适配方式，不能用无效的宽高属性代替。图标的含义与脸部、颜色、底座等可见特征也要成对检查，不能只凭文件名相同认定角色相同。
+
+外框、正文、图标和连接线复用同一组几何数据与坐标含义。标题背景按字宽和内边距计算到可用安全宽度；节点文字放在节点内部，箭头头部在节点之间实际可见；图标与文字先按组合宽度排布再居中，避免覆盖。读取大型工程时，用当前工具的 compact 摘要与选定字段确认身份和变化；完整文档可由正常 CLI 保存到授权文件供脚本处理。合并独立的同类读取，按需要查看原文和实帧，减少反复把整个工程加入对话。
+
+取帧或导出准备也可能保存当前工程，修订增加本身不能证明有人改了内容。结合原作业、实际字段与归一化后的语义核对变化；每次写入仍读取当前修订并执行 CAS，不忽略真正的外部修改，也不把缺省属性的读回展开当成整份工程回退。
+
+字幕除不重叠外，还要按用户风格检查字宽、停留时间与台词覆盖。动画分别看触发前、进行中和完成后的画面；终点关键帧不自动表示此前一直隐藏。抠像、白边和残影清理在实际素材尺寸下查看头发、手部及边界，小尺寸试验参数不能直接认证全分辨率效果。
+
+同页标题、按钮、选中项和换页可有不同视觉时刻。保留已核语音词锚，另外记录实际视觉触发，不用一个语音事件同时启动所有元素。最终静帧一致也可能有按钮提前两秒的问题；连续原生短片发现新中间态时补入采样矩阵，按同一来源留失败和复验记录，再核真实全长。终检请未参与制作、干净上下文的独立审查 Agent 按所选配方与实际文件检查，缺输入明确标为无法验证。
+
+短字幕拆分时保留每个字符对应的原词时刻，用真实拆分位置确定两侧起止，不能用整个缓冲区的末时刻作为中间断点。校正术语时，在原转写行内保序对齐未改字符，局部替换继承对应词区间，插入只在相邻真实锚点内插值；不因一处校正让整句改为等距计时，也不回头匹配另一处同名短语。中文和 ASCII 断句标点一致处理，避免拆开术语；除字宽/覆盖外核对原词时刻、短条闪过和句尾。未知时刻列清单并局部听看，不从校验中豁免后称为通过。
+
+ASR 的词号可能按单字划分，自然断句还需检查中文语义边界，可复用现有中文分词能力并保留领域术语。LCS 全部匹配也不保证原时刻正确：零长词、漏词或被拉长的后句会把新补文字压成快闪。把字数与停留时间一起查；参考已有烧录字幕时，用实际帧核对疑点的显示区间及原话。需要精确边界时记录独立准确 seek 或源帧号，重采样抽帧的输出时间不能直接当成原词时刻。局部转写出现无关口号等幻觉时保留失败，格式和电平正常也不能把它变成正确台词。
+
+同源参考已有清晰烧录字幕时，可复用现成 OCR 辅助提取显示窗口，先核帧率、起始时间和实际源帧映射，并用独立准确 seek 校准样本。OCR 的淡入漏字和术语误识仍须看原图；窗口表示整条文字的显示时间，不是逐字语音时刻。按全文顺序匹配、保留差异清单，再结合实际字幕与原片转写校正遗漏或错字，不机械替换用户原话。旧数据中的 `fix`、`corrected` 或“已对齐”标签不是核验结论；图卡角色名也不一定等于该句说法。黄色重点按实际出现的时刻和词位置恢复，不能把所有同名词一律染黄。
+
+局部排除遮罩也要检查人物移动：中间一帧清掉了玩偶，不代表片段开头侧头时不会裁掉发缘。使用当前应用已支持的图片坐标与片段局部关键帧，先留原属性，试后正常恢复；核首中末和连续原生短片后才采用。不要用全局提高置信阈值或一张漂亮截图替代运动检查。
+
+首中末采样也可能漏掉仅两三帧的残片。连续片中发现问题时，按实际帧号定位姿态和局部时刻，用已有跟随框或短时生效的遮罩修正，保留失败输出再复验完整跨度。只对已验证片段采用；可复用配方应保留源剪点绑定，图片比例坐标和片段局部秒数不随 4K 像素倍率缩放。细微白边缺口仍如实记录，不能把诊断数值下降写成逐像素一致。
+
+变速后用实际导出的同一句话核对声音；浏览器音频的 `playbackRate` 可能同时改变音高，时间线倍速正确不代表人声自然。需要保音高时，可用现有 FFmpeg `atempo` 制作派生音频并正常导入，保留原声文件和处理记录。整段按恒定倍率派生时，音频速度设回 1、源入点按新素材时间轴换算，视频保持所需速度并静音，核对分声道轨道，避免重复旁白。映射公式和派生 WAV 检查不能替代原生短片的音高、接点和句尾验证。交付要求响度规范化时显式设置当前应用支持的目标响度与真峰；默认空值不表示已执行规范化。
+
 ## Get the blueprint
 
 ```
@@ -22,20 +66,29 @@ fablecut_analyze_reference {path:"C:\\…\\ref.mp4"}
 ```
 
 Uses the installed application's prepared ffmpeg. It returns shot boundaries (`cuts`, `shots[]` with a
-per-shot `energy` 0–100), music `beats[]` and `bpm`, a loudness `energy` curve,
-and `drop` — the biggest musical rise. It also extracts the reference's music
-track into the project and registers it as media, so the rebuild can sit on the
-same song.
+per-shot `energy` 0–100), detected `beats[]` and `bpm`, a loudness `energy` curve,
+and `drop` — the biggest detected energy rise. Speech can also produce periodic
+peaks; these numbers do not prove there is music.
+
+Optional audio extraction registers the reference's **entire audio track** as media.
+It does not separate music from speech. For talking-head references, use MCP
+`registerMusic:false` when extraction is unnecessary (`music:false` is the REST/analysis option).
+Before reusing extracted audio, check its contents
+and the user's authorization; never layer reference narration over the source
+speaker as if it were an instrumental bed.
 
 If obvious cuts were missed, lower `threshold`; if camera motion is being read
 as cuts, raise it.
 
 ## Rebuild
 
-1. Read current project identity and revision, then match the canvas: copy the reference's `width`/`height`/`fps` onto the
-   project. Write `beats` into `markers` so the user can see the grid and the UI
+For a music-led montage, the following is an optional rhythm recipe. Talking-head
+explainers instead map their source speech and visual events onto the timeline.
+
+1. Read current project identity and revision, then choose the canvas and delivery
+   settings from the user's goal and source detail. Write useful `beats` into `markers` so the user can see the grid and the UI
    snaps drags to it.
-2. Use the extracted music only when its delivery use is authorized; otherwise choose the user's authorized track. Put music on A1, `in: 0`, running the full reference duration.
+2. Only use a confirmed music track when delivery use is authorized; otherwise choose the user's authorized track or retain speech without music. Its start and duration follow the intended edit.
 3. One clip per `shots[]` entry on V1 at the same `start` and `duration`. Match
    footage to each shot's `energy` — calm material under ~40, motion over ~70 —
    and choose each clip's `in` so something actually happens inside the window.
@@ -58,6 +111,24 @@ that miss.
 Full recipe, including the exact keyframe shapes for speed ramps and impact
 layers: `fablecut_docs {section:"Remake a reference video"}` and
 `fablecut_docs {section:"Recipes"}`.
+
+## 用实际成片闭环
+
+先检查每种构图、长字幕、图卡进入和退出、人物边缘及结尾的实际画面，再看运动连续性和声画接点。图形文字应对应正在讲的内容，逐项出现不能只靠静态总览截图证明。声音按任务测量综合响度、峰值及动态；源声安静时按实际需要压缩、限制和规范化，不只增加增益造成削波。以当前手册为准：例如音频 `volume` 是比例，`gain` 是 dB，不能套用百分比图像参数。
+
+图卡按真实视觉事件建立显示状态清单：每页早期截图不能认证晚出的选项、按钮描边、选中颜色、注释和最终布局。旧配方的元素描述也可能是推测；以对应时刻的参考实帧核对，不能把多选高亮改成想象的另一排标签。图标尺寸按实际可见墨迹和留白测量，不把 SVG viewBox 或文件宽度等同于可见内容宽度；共享工厂变更须复核其它使用页。
+
+通过原应用 job 导出并核对文件、完整解码和约定规格，保留工程、输入哈希、素材映射、导出回执与仍有差异的部分。沿用[受管应用合同](../video-editing/SKILL.md)，不得把另一工具生成的整片或直接复制参考成片当作应用能力证明。
+
+查看实际图像或成片里的帧后再判断人物、图形和字幕是否正确，不能根据回执文字想象画面。预览和附着调试器的诊断可能改变后台执行条件；最终仍沿正常受管、后台原作业取帧和导出验收。就绪的视频尺寸、刷新过的遮罩、作业完成及可解码文件，都不能单独证明人物像素正确。发现差异保留原作业与实际输出，按当前应用手册处理，不在技能中硬编码驱动参数或启动另一服务。
+
+全长编码失败时先保留原 job 和错误，再明确发起失败时刻附近的短窗诊断。短窗成功只能证明该内容在本次条件下可导出，不能据此认定长生命周期或驱动根因。应用更新后的全长重试使用新请求和新回执，不覆盖失败；若当前交付回执含恢复帧诊断，按同版手册检查这些实际帧及前后帧，确认人物、字幕和图形仍在。有限故障注入、CI 或短片通过均不能替代整片。
+
+短窗正常而全片在近似帧数失败时，还需真实较长的原工具通路诊断；单纯图像编码夹具没有视频解码、人物分割与整套合成。记录实际 frame/step 与原 job 终态，不能把“停止回报进度”直接认成浏览器崩溃。保留同一快照做 CPU 读回也可能失败；这类快照/编码交接由应用修复，剪辑师不以重启整片、跳帧或另一套渲染器掩盖。
+
+先确认本次工具返回的实际图像可见，再给出视觉结论。图片文件已生成、回执带有媒体引用，或上下文里有一张旧参考图，都不等于模型看到了本次输出。发现回执与可见图片不一致时记录具体作业，沿现有图片读取能力复核，并报告反馈缺口；不要依据旧图描述新图。每轮先修内容、构图、时间和声音的实质差异，再处理纹理或阴影的细微差别，及时进入整片检查。
+
+用户要求稳定复现时，将已验证的方法沉淀为可复用说明或工程构建素材，从新工程重复实际制作和完整导出，检查主要事件、画面和声音。重复导出同一个现成工程只能验证该工程的导出；一条短片通过也不能证明整条长片稳定。说明实际连续成功次数、输入范围和运行环境，失败保留原 job 并排查后显式重试。
 
 ## Be honest about what this does
 

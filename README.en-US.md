@@ -24,7 +24,7 @@ Install 视频剪辑 through DesireCore's governed application flow. Install thi
 node scripts/package-seed.mjs --output <new-file.zip>
 ```
 
-The deterministic packager includes exactly 21 named source files (including the portrait and its provenance) under `video-editor/`, rejects symlinks, and refuses to overwrite an existing output. Never package a PoC export or an entire working directory. Use the actual platform import result as the local Agent ID; `agent.json.id` is a fresh source UUID.
+The deterministic packager includes only explicitly named source files (including the portrait, shot references and provenance) under `video-editor/`, rejects symlinks, and refuses to overwrite an existing output. Never package a PoC export or an entire working directory. Use the actual platform import result as the local Agent ID; `agent.json.id` is a fresh source UUID.
 
 Agent 0.1.2 requires video-editing 0.1.7 or later for the connection handoff helpers and persistent keyword colours. Verify support in the current material’s CLI help and manual before use.
 
@@ -34,10 +34,12 @@ Application association is an entry preference. Tool, file, MCP, model, credenti
 
 - `video-editing`: managed application discovery, identity, revisions, MCP and export receipts.
 - `edit-video`: cuts, sound, captions, grading, transitions, speed changes and export.
-- `motion-graphics`: shapes, parenting, motion paths, compositions, templates and keyframes.
-- `remake-reel`: reference rhythm analysis and rebuilding with the user's footage.
+- `motion-graphics`: shapes, parenting, motion paths, compositions, templates and keyframes; on-demand lookup of 124 Shotcraft cards / 150 styles, exact demo source and the SFX sourcing helper.
+- `remake-reel`: compare reference visuals, speech, graphic timing and sound; rebuild with the user's footage and repeat from new projects.
 
 The latter three reuse FableCut's MIT skills. Original files, fixed commit and hashes are preserved in the [source record](skills/video-editing/references/upstream/SOURCE.json). Timeline/tool grammar is retained; managed lifecycle, project revision and receipt guidance are adapted. The compatible `fablecut_` tool prefix does not require an independent upstream server.
+
+The [Shotcraft adaptation guide](skills/motion-graphics/references/shotcraft/README.md) covers fixed provenance, frame-rate/coordinate conversion, native capability limits, audio licenses and independent final review. References and source ship in the seed without Gallery media, dependencies or another renderer. The 150 styles are reference vocabulary, not a claim that every style has passed native validation.
 
 Smart defaults express `flagship` strength with `tool_use` and `vision`. No Provider, exact model or Provider ceiling is selected. A real Run determines its route; tier is not a budget limit. The [bundled original transparent portrait](assets/README.md) uses `generationPolicy: manual`, with a deterministic character fallback and no generation request during installation.
 
@@ -54,4 +56,4 @@ Publish source through a reviewed branch PR with current-head CI. Marketplace me
 
 ## License
 
-[MIT](LICENSE). Upstream skills: Copyright (c) 2026 ronak-create. See the complete [FableCut MIT license](licenses/FableCut-MIT.txt).
+Original content: [MIT](LICENSE). Shotcraft references and tools: [Apache-2.0](licenses/VideoShotcraft-Apache-2.0.txt); audio requires per-asset licensing. Full attribution: [NOTICE](NOTICE). Upstream skills: Copyright (c) 2026 ronak-create. See the complete [FableCut MIT license](licenses/FableCut-MIT.txt).

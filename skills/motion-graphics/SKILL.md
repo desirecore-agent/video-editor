@@ -1,6 +1,6 @@
 ---
 name: motion-graphics
-description: 在视频剪辑时间线上制作形状、描边动画、父子关系、运动路径、文字路径、可复用合成、预设与模板。需要原创动效、标注或组合运动时使用。
+description: 在视频剪辑时间线上制作动效，按需检索 Shotcraft 镜头卡、准确样式源码和音效选材工具。需要形状、文字强调、运动路径、合成、镜头配方，或用户点名 video-shotcraft 时使用。
 ---
 
 > Adapted from ronak-create/FableCut (MIT), source `61bf46babca82214c162c0650e47a81c3530982c`.
@@ -9,6 +9,8 @@ description: 在视频剪辑时间线上制作形状、描边动画、父子关�
 
 
 # Motion graphics with 视频剪辑
+
+需要镜头词汇、文字强调、卡片组装、运镜或用户指定 video-shotcraft 时，按需读 [Shotcraft 适配指南](references/shotcraft/README.md)：固定 124 卡 / 150 样式的检索、原文和准确 demo 源码、音效来源工具与独立终检。先核卡名/style-key 和现用应用能力，再物化为当前时间线数据；源码可参考不代表所有样式已原生验证。用户已选 DesireCore 时沿受管应用制作，不启动上游工作台或替代渲染器。
 
 Motion graphics in 视频剪辑 are ordinary clips on the timeline, so everything
 you know about clips (tracks, keyframes, transitions, masks, blend) still

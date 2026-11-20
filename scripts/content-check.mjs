@@ -2,11 +2,13 @@ import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { resolve, dirname, relative, sep } from 'node:path';
 import { createHash } from 'node:crypto';
 import { SEED_FILES } from './seed-files.mjs';
+import { checkShotcraft } from './check-shotcraft.mjs';
 /** Source-policy checks supplement the current platform Schema and skill parser. */
 export function checkContent(root) {
   const read = (name) => readFileSync(resolve(root, name), 'utf8');
   const config = JSON.parse(read('agent.json'));
   const errors = [];
+  errors.push(...checkShotcraft(root));
   const requireValue = (value, message) => { if (!value) errors.push(message); };
   requireValue(config.$schema === 'http://desirecore/schemas/agent-seed.json', 'Source must use agent-seed Schema.');
   requireValue(config.name === '视频剪辑师' && config.id === 'c5a424f2-d946-47fd-a12e-2602d0da37ed', 'New Agent identity must be preserved.');
@@ -28,7 +30,7 @@ export function checkContent(root) {
   requireValue(!config.default_enabled?.tools?.length && !config.tool_permissions, 'Seed must not grant tools.');
   const skills = config.default_enabled?.skills ?? [];
   requireValue(JSON.stringify(skills) === JSON.stringify(['video-editing', 'edit-video', 'motion-graphics', 'remake-reel']), 'Expected four independent skills.');
-  const activeFiles = ['README.md', 'README.en-US.md', 'USAGE.md', 'AGENTS.md', 'persona.md', 'principles.md', 'instructions.md'];
+  const activeFiles = ['README.md', 'README.en-US.md', 'USAGE.md', 'AGENTS.md', 'persona.md', 'principles.md', 'instructions.md', 'skills/motion-graphics/references/shotcraft/README.md'];
   for (const id of skills) {
     const name = `skills/${id}/SKILL.md`;
     if (!/^[a-z0-9-]+$/.test(id) || !existsSync(resolve(root, name))) { errors.push(`Missing or unsafe skill: ${id}`); continue; }
