@@ -58,6 +58,10 @@ python -X utf8 references/shotcraft/upstream/assets/scripts/sfx-source.py analyz
 
 声音对齐分别记录素材自身峰值滞后和实际输出音轨偏移。上游 Remotion/AAC 的补偿常数不能套到当前应用。用户片无 BGM 时只交付所需版本，不为满足上游产品片模板额外混音；输出仍检查整 mix、接点、原话和用户要求的响度。
 
+声音清单以实际工程为准：无 BGM 不等于“只有原声”，已加入的提示音也要逐项核来源和用途。图卡修改后复核 cue：标题、按钮、选中可能共用语音事件，却在不同时刻可见；按当前动作落点排声，不继续沿旧词锚。已删除的视觉不保留孤立提示，同一次换页不叠两次转场，同组错峰不必逐件发声。用纸张、木敲和真实点击等符合物体与动作的声源，避免无叙事用途的游戏提示音。
+
+同一录音可能有按下、释放等多个攻击，不能只把全文件最大峰机械对齐。选取所需单击时保留原文件，记录裁剪、增益、处理后 SHA 和实际内部峰偏移，再正常导入处理后的文件。候选过静或不干净时换更合适的声源；搜索无结果只说明当前查询未命中，可简化质感限定词继续查找，不能宣称素材库没有此能力。
+
 ## 真实画面与成片检查
 
 制作前按需读 [pipeline](upstream/references/pipeline.md)、[aesthetic-rules](upstream/references/aesthetic-rules.md) 和 [final-review](upstream/references/final-review.md)。工具、创作模式和素材已明确时直接沿用，不反复询问默认宣传片模式。
